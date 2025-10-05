@@ -1,3 +1,11 @@
+# 6.0.0 / 2025/10/04
+
+**NOTICE**: I have forked my own copy of the **node-adodb** repository and rely heavily on the excellent work done by the original author, nuintun (https://github.com/nuintun). I owe a deep sense of gratitude for his efforts and want to give him full credit for his work. My goal for publishing this repository as a new package is to extend the functionality while also preserving the previous interfaces. I have also deprecated the use of older NodeJS versions. Given that these older versions have reached EOL status, I did not feel compelled to continue supporting them. The original version of this package can still be installed and used if there is a pressing need to use older versions.
+
+- Restored original query() functionality. Created a new query_v2() to provide a typed return record. This record contains a **type** key to indicate the structure of the **RecordSet** value.
+- When **type == false**, the format of the RecordSet is an array of records<>. Each record represents a single row of the result set returned by the **SELECT** command. The keys are the Field Names and the values are the returned data value and type.
+- When **type == true**, the format of the RecordSet is a record type. The key **FieldMetaData** has two keys within it. One key, **FieldName** is an array of strings corresponding to the Field Names of the RecordSet. The other key, **FieldType**, corresponds to the data type of each field. The values are the ADO data type values for the DataType enum. The other element found in the **ResultSet** record is also named **ResultSet** and is an array of arrays. Each of the inner arrays is a single row set of the data and consists of the values for each column.
+
 # 5.0.4 / 2025/09/13
 
 - Added optional parameter **FetchArrays** to query() to return the results of the query as an object.

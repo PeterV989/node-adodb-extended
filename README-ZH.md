@@ -11,7 +11,7 @@
 
 ### 安装
 
-[![NPM](https://nodei.co/npm/node-adodb.png)](https://nodei.co/npm/node-adodb/)
+[![NPM](https://nodei.co/npm/node-adodb-extended.png)](https://nodei.co/npm/node-adodb-extended/)
 
 ### 使用示例:
 
@@ -20,7 +20,7 @@
 ```js
 'use strict';
 
-const ADODB = require('node-adodb');
+const ADODB = require('node-adodb-extended');
 const connection = ADODB.open('Provider=Microsoft.Jet.OLEDB.4.0;Data Source=node-adodb.mdb;');
 
 // 交易
@@ -65,6 +65,26 @@ connection
     console.error(error);
   });
 
+// 查询返回的对象数组
+connection
+  .query_v2('SELECT * FROM Users', false)
+  .then(data => {
+    console.log(JSON.stringify(data, null, 2));
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+// 返回数组数组的查询
+connection
+  .query_v2('SELECT * FROM Users', true)
+  .then(data => {
+    console.log(JSON.stringify(data, null, 2));
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
 // 带字段描述的查询
 connection
   .schema(20)
@@ -95,6 +115,30 @@ async function query() {
 }
 
 query();
+
+
+async function query_v2(FetchArrays) {
+  try {
+    const users = await connection.query('SELECT * FROM Users', FetchArrays);
+
+    console.log(JSON.stringify(users, null, 2));
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+query_v2(false);
+// Will return a typed structure.
+// key **type** == false. Indicates the returned structure.
+// key **ResultSet** is an array of objects (records). (Identical to original query but within the recorrd).
+
+query_v2(true);
+// Will return a typed object.
+// key **type** == true. Indicates the returned structure.
+// key **ResultSet['FieldMetaData']['FieldName']** is an array of strings.
+// key **ResultSet['FieldMetaData']['FieldType']** is an array of data types.
+// key **ResultSet['ResultSet']** is an array of arrays.
+
 ```
 
 ### 接口文档:
@@ -104,6 +148,7 @@ query();
 > 初始化数据库链接参数。
 
 `ADODB.query(sql): Promise`
+`ADODB.query_v2(sql[, FetchArrays = false]): Promise`
 
 > 执行有返回值的 SQL 语句。
 

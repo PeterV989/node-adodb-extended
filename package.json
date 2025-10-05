@@ -1,6 +1,6 @@
 {
-  "name": "node-adodb",
-  "version": "5.0.5",
+  "name": "@peterv959/node-adodb-extended",
+  "version": "6.0.0",
   "main": "index.js",
   "license": "MIT",
   "keywords": [
@@ -11,24 +11,30 @@
     "node-adodb",
     "microsoft adodb"
   ],
-  "homepage": "https://github.com/nuintun/node-adodb#readme",
+  "homepage": "https://github.com/PeterV989/node-adodb-extended#readme",
   "description": "A Node.js JavaScript Client implementing the ADODB protocol.",
   "author": {
-    "name": "nuintun",
-    "email": "nuintun@qq.com"
+    "name": "peter v."
   },
+  "contributors": [
+    {
+      "name": "nuintun",
+      "email": "nuintun@qq.com",
+      "original author": "Yes"
+    }
+  ],
   "bugs": {
-    "url": "https://github.com/nuintun/node-adodb/issues"
+    "url": "https://github.com/PeterV989/node-adodb-extended/issues"
   },
   "os": [
     "win32"
   ],
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=16.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nuintun/node-adodb.git"
+    "url": "git+https://github.com/PeterV989/node-adodb-extended.git"
   },
   "dependencies": {
     "arch": "^2.1.1",

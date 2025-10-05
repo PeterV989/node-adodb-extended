@@ -1,6 +1,11 @@
-# node-adodb
+# node-adodb-extended
 
 > A node.js javascript client implementing the ADODB protocol on windows.
+>
+> NOTE: This is a community maintained version which has been updated to add
+> other formats returned by the query. My heartfelt thanks go to the original
+> author, **niuntun** whose work is being extended, not replaced. Thank you **niuntun** for
+> your efforts.
 >
 > [![NPM Version][npm-image]][npm-url]
 > [![Download Status][download-image]][npm-url]
@@ -11,7 +16,7 @@
 
 ### Install
 
-[![NPM](https://nodei.co/npm/node-adodb.png)](https://nodei.co/npm/node-adodb/)
+[![NPM](https://nodei.co/npm/node-adodb-extended.png)](https://nodei.co/npm/node-adodb-extended/)
 
 ### Introduction:
 
@@ -20,7 +25,7 @@
 ```js
 'use strict';
 
-const ADODB = require('node-adodb');
+const ADODB = require('node-adodb-extended');
 const connection = ADODB.open('Provider=Microsoft.Jet.OLEDB.4.0;Data Source=node-adodb.mdb;');
 
 // Transaction
@@ -67,7 +72,17 @@ connection
 
 // Query with return as record type
 connection
-  .query('SELECT * FROM Users', true)
+  .query_v2('SELECT * FROM Users', false)
+  .then(data => {
+    console.log(JSON.stringify(data, null, 2));
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+// Query with return as array type
+connection
+  .query_v2('SELECT * FROM Users', true)
   .then(data => {
     console.log(JSON.stringify(data, null, 2));
   })
@@ -91,7 +106,7 @@ connection
 ```js
 'use strict';
 
-const ADODB = require('node-adodb');
+const ADODB = require('node-adodb-extended');
 const connection = ADODB.open('Provider=Microsoft.Jet.OLEDB.4.0;Data Source=node-adodb.mdb;');
 
 async function query() {
@@ -105,6 +120,23 @@ async function query() {
 }
 
 query();
+
+
+async function query_v2(FetchArrays = false) {
+  try {
+    const users = await connection.query('SELECT * FROM Users', FetchArrays);
+
+    console.log(JSON.stringify(users, null, 2));
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+query_v2(false);
+// returns typed array of objects
+
+query_v2(true);
+// returns typed array of arrays along with field meta data
 ```
 
 ### API:
@@ -113,9 +145,21 @@ query();
 
 > Initialization database link parameters.
 
-`ADODB.query(sql[, FetchArrays]): Promise`
+`ADODB.query(sql): Promise`
 
-> Execute a SQL statement that returns a value. value is an array of records when FetchArrays is falsey. value is a record type when FetchArrays is true.
+ > Execute SQL statement returning an array of objects (records).
+
+`ADODB.query_v2(sql[, FetchArrays = false]): Promise`
+
+> Execute a SQL statement that returns a typed structure.
+
+> data['type'] == false:
+> data['RecordSet'] is an array of objects.
+
+> data['type'] == true:
+> data['RecordSet']['FieldMetaData']['FieldName'] is an array of strings.
+> data['RecordSet']['FieldMetaData']['FieldType'] is an array of number which are the ADO DataTypeEnum values.
+> data['RecordSet']['RecordSet'] is an array of arrays.
 
 `ADODB.execute(sql[, scalar]): Promise`
 
@@ -135,7 +179,7 @@ query();
 
 ### Extension:
 
-> This library theory supports all databases on the Windows platform that support ADODB connections, and only need to change the database connection string to achieve the operation!
+> This library theory supports all databases on the Windows platform that support ADODB connections, and only need to change the database connection string to achieve the operation! However, the Access Jet Engine requires the use of the Win32 OLE data provider. Use the x64 flag to control which bitness of the OLE Provider to use. [Note: This has no effect on the bitness of the app itself. An x64 app can still use the x32 version.]
 
 > Common access connection strings:
 >
@@ -150,6 +194,8 @@ query();
 
 ### Electron
 
+**ATTENTION: I have no means to test this with Electron. If you need Electron support, please reach out and I will make every effort to accomodate your needs.**
+
 > If you want to use this module in an electron app running from an asar package you'll need to make some changes.
 
 > 1. Move `adodb.js` outside the asar package (in this example I use electron-builder, the `extraResources` option can move the file outside the asar package)
@@ -157,7 +203,7 @@ query();
 ```json
 "extraResources": [
   {
-    "from": "./node_modules/node-adodb/lib/adodb.js",
+    "from": "./node_modules/node-adodb-extended/lib/adodb.js",
     "to": "adodb.js"
   }
 ]
@@ -173,13 +219,38 @@ if (process.mainModule.filename.indexOf('app.asar') !== -1) {
 }
 ```
 
-[npm-image]: https://img.shields.io/npm/v/node-adodb.svg?style=flat-square
-[npm-url]: https://www.npmjs.org/package/node-adodb
-[download-image]: https://img.shields.io/npm/dm/node-adodb.svg?style=flat-square
-[appveyor-image]: https://img.shields.io/appveyor/ci/nuintun/node-adodb/master.svg?style=flat-square&label=windows
-[appveyor-url]: https://ci.appveyor.com/project/nuintun/node-adodb
-[coveralls-image]: http://img.shields.io/coveralls/nuintun/node-adodb/master.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/nuintun/node-adodb?branch=master
-[david-image]: https://img.shields.io/david/nuintun/node-adodb.svg?style=flat-square
-[david-url]: https://david-dm.org/nuintun/node-adodb
-[node-image]: https://img.shields.io/node/v/node-adodb.svg?style=flat-square
+### Next modification
+
+Finally, it is my strong desire to implement another method to allow the use of parameterized SQL
+statements. This entails some thought as to how thorough I want to be in this endeavor. Simplistically, I would only implement a typed array of input parameters, nothing more. But, to
+be thorough I would prefer to implement the full range of parameter options. Realisticly, I'm not
+certain I know enough about other types of parameters (output, input-output, etc.) to understand
+how to go about testing my interface. My recent experience with parameters involved VBA in Microsoft
+Excel. There were a lot of hoops to jump through to add parameters.
+
+### One final note
+
+This package uses the Windows `cscript` command. Hence there is no C++ code to make this work. I
+have no need for anything "production" ready. I am using this for a small custom server to
+display data dashboards within our environment. As such, it works just fine for my needs. However,
+I would not recommend it for anything with high traffic needs. In my use case I also use some
+mutexes to limit the use to a single instance. Perhaps this is overkill, perhaps not. But if your
+needs are small, this package should work just fine. This package would also work nicely if you
+wanted to perform data dumps for reports. Again, just keep it simple. My interest in this package
+stemmed from being behind a firewall which prevented me from installing a native implementation
+of the `node_ibmdb` package. Had I had the time, I would have pursued that route but it had become
+something of a rabbit hole and I looked for a more generic approach. I will say that this package
+should allow for a single means of accessing SQL databases vs. having a bespoke version for each
+provider. I hope that anyone who needs something simple can benefit from this package. Were it
+not for niuntun's efforts, this package would never be as polished as it is. My hat's off to him.
+
+[npm-image]: https://img.shields.io/npm/v/node-adodb-extended.svg?style=flat-square
+[npm-url]: https://www.npmjs.org/package/node-adodb-extended
+[download-image]: https://img.shields.io/npm/dm/node-adodb-extended.svg?style=flat-square
+[appveyor-image]: https://img.shields.io/appveyor/ci/nuintun/node-adodb-extended/master.svg?style=flat-square&label=windows
+[appveyor-url]: https://ci.appveyor.com/project/nuintun/node-adodb-extended
+[coveralls-image]: http://img.shields.io/coveralls/nuintun/node-adodb-extended/master.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/nuintun/node-adodb-extended?branch=master
+[david-image]: https://img.shields.io/david/nuintun/node-adodb-extended.svg?style=flat-square
+[david-url]: https://david-dm.org/nuintun/node-adodb-extended
+[node-image]: https://img.shields.io/node/v/node-adodb-extended.svg?style=flat-square
