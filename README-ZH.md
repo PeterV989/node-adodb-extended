@@ -1,5 +1,7 @@
 # node-adodb
+> 一个在 Windows 上实现 ADODB 协议的 Node.js JavaScript 客户端。
 
+> 注意：这是一个社区维护的版本，已更新，添加了查询返回的其他格式。衷心感谢原作者 nuintun，他的工作只是被扩展，而不是被取代。感谢 nuintun 的努力。
 > 一个用 Node.js 实现的 windows 上的 ADODB 协议。
 >
 > [![NPM Version][npm-image]][npm-url]

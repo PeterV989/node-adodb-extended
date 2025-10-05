@@ -4,7 +4,7 @@
 >
 > NOTE: This is a community maintained version which has been updated to add
 > other formats returned by the query. My heartfelt thanks go to the original
-> author, **niuntun** whose work is being extended, not replaced. Thank you **niuntun** for
+> author, **nuintun** whose work is being extended, not replaced. Thank you **nuintun** for
 > your efforts.
 >
 > [![NPM Version][npm-image]][npm-url]
@@ -242,7 +242,7 @@ of the `node_ibmdb` package. Had I had the time, I would have pursued that route
 something of a rabbit hole and I looked for a more generic approach. I will say that this package
 should allow for a single means of accessing SQL databases vs. having a bespoke version for each
 provider. I hope that anyone who needs something simple can benefit from this package. Were it
-not for niuntun's efforts, this package would never be as polished as it is. My hat's off to him.
+not for nuintun's efforts, this package would never be as polished as it is. My hat's off to him.
 
 [npm-image]: https://img.shields.io/npm/v/node-adodb-extended.svg?style=flat-square
 [npm-url]: https://www.npmjs.org/package/node-adodb-extended
