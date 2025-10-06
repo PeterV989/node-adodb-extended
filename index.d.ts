@@ -1,4 +1,4 @@
-declare module 'node-adodb' {
+declare module 'node-adodb-extended' {
   let PATH: string;
   const open: (connection: string, x64?: boolean) => open;
 

@@ -1,3 +1,15 @@
+# 6.0.3 / 2025/10/06
+
+- Fixed the index.d.ts file. I neglected to indicate the ISQLObject.ResultSet was an array of InnerObject.
+
+# 6.0.2 / 2025/10/05
+
+- Cleaned up some minor errors.
+
+# 6.0.1 / 2025/10/04
+
+- Fixed some typos in the README.md file
+
 # 6.0.0 / 2025/10/04
 
 **NOTICE**: I have forked my own copy of the **node-adodb** repository and rely heavily on the excellent work done by the original author, nuintun (https://github.com/nuintun). I owe a deep sense of gratitude for his efforts and want to give him full credit for his work. My goal for publishing this repository as a new package is to extend the functionality while also preserving the previous interfaces. I have also deprecated the use of older NodeJS versions. Given that these older versions have reached EOL status, I did not feel compelled to continue supporting them. The original version of this package can still be installed and used if there is a pressing need to use older versions.
