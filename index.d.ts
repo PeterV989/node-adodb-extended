@@ -14,9 +14,6 @@ declare module 'node-adodb-extended' {
 // These are the types and interfaces returned by the query and query_v2 methods
 export type ColumnValue = (string | number | boolean | Date | null);
 export type RowValues = ColumnValue[];
-// The following type is also returned by the original query() method
-export type InnerObject = Record<string, ColumnValue>;
-
 
 interface ISQLInnerArray {
   FieldMetaData: {
@@ -31,9 +28,12 @@ export interface ISQLArray {
   ResultSet: ISQLInnerArray;
 }
 
+// The following type is also returned by the original query() method
+export type InnerObject = Record<string, ColumnValue>;
+
 export interface ISQLObject {
   type: false,	// FetchArray = false
-  ResultSet: InnerObject
+  ResultSet: InnerObject[]
 };
 
 export type SQLResults = ISQLArray | ISQLObject;

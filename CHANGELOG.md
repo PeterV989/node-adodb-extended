@@ -1,3 +1,7 @@
+# 6.0.4 / 2025/10/06
+
+- Fixed the index.d.ts file. I neglected to indicate the ISQLObject.ResultSet was an array of InnerObject.
+
 # 6.0.3 / 2025/10/06
 
 - Fixed the index.d.ts file. I neglected to indicate the ISQLObject.ResultSet was an array of InnerObject.
