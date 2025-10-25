@@ -1,0 +1,4 @@
+{
+  "connection": "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\\Users\\vermi\\source\\NodeJS\\node-adodb-extended\\test\\node-adodb.mdb;User ID=PV260506;Password=Pass;",
+  "sql": "SELECT * FROM USERS"
+}
